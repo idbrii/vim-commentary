@@ -8,10 +8,16 @@ if exists("g:loaded_commentary") || v:version < 700
 endif
 let g:loaded_commentary = 1
 
+if !exists("g:commentary_marker")
+  let g:commentary_marker = ''
+endif 
+
 function! s:surroundings() abort
   " Get commentstring with %s and whitespace padding.
   let cms = substitute(substitute(substitute(
         \ &commentstring, '^$', '%s', ''), '\S\zs%s',' %s', '') ,'%s\ze\S', '%s ', '')
+  " Postfix comment leader with marker to make auto commented code easier to find.
+  let cms = substitute(cms, '\S\zs\s*%s', g:commentary_marker ..'&','')
   let fmt = get(b:, 'commentary_format', cms)
   return split(fmt, '%s', 1)
 endfunction
