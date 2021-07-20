@@ -9,8 +9,11 @@ endif
 let g:loaded_commentary = 1
 
 function! s:surroundings() abort
-  return split(get(b:, 'commentary_format', substitute(substitute(substitute(
-        \ &commentstring, '^$', '%s', ''), '\S\zs%s',' %s', '') ,'%s\ze\S', '%s ', '')), '%s', 1)
+  " Get commentstring with %s and whitespace padding.
+  let cms = substitute(substitute(substitute(
+        \ &commentstring, '^$', '%s', ''), '\S\zs%s',' %s', '') ,'%s\ze\S', '%s ', '')
+  let fmt = get(b:, 'commentary_format', cms)
+  return split(fmt, '%s', 1)
 endfunction
 
 function! s:strip_white_space(l,r,line) abort
